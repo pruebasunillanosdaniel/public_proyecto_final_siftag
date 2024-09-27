@@ -1,0 +1,32 @@
+f
+export endpoint="golang_servicios:9000"
+export correo_usuario=danielsalga50@hotmail.es
+export password_usuario=aid573move841
+export server_host="http://golang_servicios:9091/"
+export accessKeyID="admin"
+export secretAccessKey="password"
+export smtp_server=smtp-mail.outlook.com
+export POSTGRES_USER=tesis
+export POSTGRES_DB=diagrama
+export server_java="http://pdf_servicio:8090"
+server {
+    listen      443 ssl;
+    listen      [::]:443 ssl;
+    include     ssl/self-signed.conf;
+    include     ssl/ssl-params.conf;
+    server_name siftag.api;
+   location / {
+    proxy_set_header Host $host;
+    proxy_pass http://golang_servicios:9091; #servicio de controlador
+  }
+
+  error_page 500 502 503 504 /50x.html;
+  location = /50x.html {
+    root /usr/share/nginx/html;
+  }
+  error_page 400 404 /40x.html;
+  location = /40x.html {
+    root /usr/share/nginx/html;
+  }
+
+}

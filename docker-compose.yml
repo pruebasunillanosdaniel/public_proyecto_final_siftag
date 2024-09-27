@@ -1,0 +1,115 @@
+services:
+# sudo docker compose up -d --no-deps --build golang_servicios
+  proxy_reverso:
+    build:
+      context: ./
+      dockerfile: ./ngix_server.DOCKERFILE
+    hostname: proxy_reverso
+    restart: always 
+    ports:
+      - 8081:80
+      - 8443:443
+    volumes:
+      - ngix_servicio_volumns:/etc/nginx_config/
+      - react_volumns:/usr/share/nginx/html
+    networks:
+      - dmz
+      - interna
+    depends_on:
+      golang_servicios:
+        condition: service_healthy
+  base_datos:
+    build :
+      context: ./
+      dockerfile: ./postgres.DOCKERFILE  
+    env_file: ".env"
+    container_name: base_datos
+    hostname: base_datos
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s 
+#    ports:
+#      - 5432:5432
+    volumes:
+      - base_datos_volumns:/var/lib/postgresql/data
+    networks:
+      - interna
+  minio_server:
+    build :
+      context: ./
+      dockerfile: ./minio.DOCKERFILE
+    env_file: ".env"     
+    restart: always
+    hostname: minio_server 
+    volumes:
+      - minio_volumns:/usr/bin/minio/data      
+    ports:
+#      - 9000:9000
+      - 9001:9001
+    networks:
+      - interna
+  pdf_servicio:
+    build :
+      context: ./
+      dockerfile: ./Java_service.DOCKERFILE
+    restart: always
+    env_file: ".env"      
+    hostname: pdf_servicio     
+#    ports:
+#      - 8090:8090
+    networks:
+      - interna
+    volumes:
+      - java_volumns:/app/pdf_server_spring
+  golang_servicios:
+    build: 
+      context: ./
+      dockerfile: ./Golang_service.DOCKERFILE
+    restart: always
+    hostname: golang_servicios      
+#    ports:
+#      - 9091:9091
+    env_file: ".env"     
+    healthcheck:
+      test: ["CMD-SHELL", "curl -I http://localhost:9091/ping "]
+      interval: 10s
+      retries: 5
+      start_period: 1s
+      timeout: 50s 
+    depends_on:
+      base_datos:
+          condition: service_healthy
+          restart: true
+      minio_server:
+          condition: service_started
+      pdf_servicio:
+          condition: service_started
+    networks:
+      - dmz
+      - interna
+networks:
+  dmz:
+    driver: bridge
+  interna:
+    internal: true
+volumes:
+  ngix_servicio_volumns:
+
+#    driver_opts:
+#       device: ./volumns/ngix
+  base_datos_volumns:
+#    driver_opts:
+#      device: ":0./volumns/postgres"
+  react_volumns:
+#    driver_opts:
+#      device: ":./volumns/react"
+  java_volumns:
+#    driver_opts:
+#      device: ":./volumns/java"
+  minio_volumns:
+#    driver_opts:
+#      device: ":./volumns/minio"

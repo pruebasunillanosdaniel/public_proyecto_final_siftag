@@ -1,0 +1,76 @@
+./minio server  /data --console-address:9001
+  environment:
+
+      - endpoint=${endpoint}
+      - accessKeyID=${accessKeyID}
+      - secretAccessKey=${secretAccessKey}
+      - smtp_server=${smtp_server}
+      - server_java=${server_java}
+      - correo_usuario=${correo_usuario}
+      - password_usuario=${password_usuario}
+      - server_host=${server_host}
+
+
+        react_service:
+    build :
+      context: ./
+      dockerfile: ./react.DOCKERFILE
+    volumes:
+      - react_volumns:/app/react_interface_proyectotesis
+         error_page 500 502 503 504 /50x.html;
+      location = /50x.html {
+        root /var/www/html/error;
+      }
+      error_page 400 404 /40x.html;
+      location = /40x.html {
+        root /var/www/html/error;
+      }
+
+      location /react/assets/ {
+        alias /usr/share/nginx/html/react/assets;
+    }
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'diagrama') THEN
+     -- PERFORM dblink_exec('dbname=' || current_database()  -- current db
+      --                  , 'CREATE DATABASE diagrama');
+         CREATE DATABASE diagrama;
+
+      GRANT ALL PRIVILEGES ON DATABASE diagrama TO tesis;
+      GRANT ALL ON SCHEMA public TO tesis;
+   END IF;
+ IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'fiber') THEN
+     -- PERFORM dblink_exec('dbname=' || current_database()  -- current db
+    --                    , 'CREATE DATABASE fiber');
+   CREATE DATABASE fiber;
+   GRANT ALL PRIVILEGES ON DATABASE fiber TO tesis;
+   GRANT ALL ON SCHEMA public TO tesis;
+   END IF;
+
+END
+
+CREATE OR REPLACE FUNCTION some_func() RETURNS void AS 
+$$
+BEGIN
+   IF NOT EXISTS (
+      SELECT FROM pg_catalog.pg_roles
+      WHERE  rolname = 'tesis') THEN
+      CREATE USER tesis with password 'unillanos';
+   END IF;
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'diagrama') THEN
+         CREATE DATABASE diagrama;
+         GRANT ALL PRIVILEGES ON DATABASE diagrama TO tesis;
+         --GRANT ALL ON SCHEMA public TO tesis;
+   END IF;
+
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'fiber') THEN
+         CREATE DATABASE diagrama;
+         GRANT ALL PRIVILEGES ON DATABASE fiber TO tesis;
+         --GRANT ALL ON SCHEMA public TO tesis;
+   END IF;
+END;
+$$ LANGUAGE plpgsql VOLATILE;
+
+SELECT some_func();
+
+DROP FUNCTION some_func();
+
+
