@@ -2,3 +2,4 @@ bin/
 certif/
 start.sh
 .env
+.env-g-tmp
