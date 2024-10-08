@@ -14,7 +14,6 @@ services:
       - react_volumns:/usr/share/nginx/html
     networks:
       - dmz
-      - interna
     depends_on:
       golang_servicios:
         condition: service_healthy
@@ -47,11 +46,12 @@ services:
     hostname: minio_server 
     volumes:
       - minio_volumns:/usr/bin/minio/data      
-    ports:
+#    ports:
 #      - 9000:9000
-      - 9001:9001
+#      - 9001:9001
     networks:
       - interna
+
   pdf_servicio:
     build :
       context: ./
