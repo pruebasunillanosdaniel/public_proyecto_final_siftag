@@ -75,4 +75,4 @@ pwd
 sudo docker compose kill
 sudo docker compose down -v 
 #sudo docker volume rm -a
-sudo docker compose -f ./docker-compose.yml  up --build  --force-recreate --remove-orphans
+sudo docker compose -f ./docker-compose.yml  up  --build  --force-recreate --remove-orphans

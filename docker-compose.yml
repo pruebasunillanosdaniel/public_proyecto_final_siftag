@@ -37,7 +37,7 @@ services:
       - base_datos_volumns:/var/lib/postgresql/data
     networks:
       - interna
-  minio_server:
+  minio-server:
     build :
       context: ./
       dockerfile: ./minio.DOCKERFILE
@@ -90,7 +90,7 @@ services:
       base_datos:
           condition: service_healthy
           restart: true
-      minio_server:
+      minio-server:
           condition: service_started
       pdf_servicio:
           condition: service_started

@@ -25,7 +25,7 @@ EXPOSE 9001
 # llenar el repositorio de  minio 
 COPY ./bin/formatos_proyecto_final /tmp/files 
 RUN /usr/bin/minio/mc mb formatosdocumento
-RUN /usr/bin/minio/mc cp --recursive  /tmp/files  formatos
+RUN /usr/bin/minio/mc cp --recursive  /tmp/files  formatosdocumento/
 #ejecutar proceso
 WORKDIR /usr/bin/minio 
 ENTRYPOINT ["./minio"]
