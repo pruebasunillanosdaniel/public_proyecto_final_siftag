@@ -42,13 +42,19 @@ services:
       context: ./
       dockerfile: ./minio.DOCKERFILE
     env_file: ".env"     
-    restart: always
-    hostname: minio_server 
+#    restart: always
+    hostname: minio_server
+    healthcheck:
+      test: ["CMD-SHELL", "curl -I http://localhost:9000 "]
+      interval: 10s
+      retries: 5
+      start_period: 1s
+      timeout: 50s  
     volumes:
       - minio_volumns:/usr/bin/minio/data      
-#    ports:
+    ports:
 #      - 9000:9000
-#      - 9001:9001
+      - 9001:9001
     networks:
       - interna
 
