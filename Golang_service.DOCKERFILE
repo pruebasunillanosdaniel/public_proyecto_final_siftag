@@ -16,7 +16,7 @@ RUN   set -eux;\
          apk --no-cache  add git 
 #RUN  set -eux;\
 #        go mod tidy
-#RUN echo -e "module Logica_negocio \n go 1.22 \n toolchain go1.22.1" > go.mod
+RUN echo -e "module Logica_negocio \n go 1.22 \n toolchain go1.22.1" > go.mod
 RUN   set -eux;\
           go mod tidy ;
 RUN go get -u github.com/pruebasunillanosdaniel/Golang_database  
