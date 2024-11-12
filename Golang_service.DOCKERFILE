@@ -6,7 +6,7 @@ COPY bin/Proyecto_final_tesis /app/Proyecto_final_tesis
 WORKDIR /app/Proyecto_final_tesis
 
 
-ENV  Private_key=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
+ENV  Private_key=XXXXX
 ENV   username=pruebasunillanosdaniel
 ENV GOPRIVATE=github.com/pruebasunillanosdaniel/*
 ENV basededatos=base_datos
