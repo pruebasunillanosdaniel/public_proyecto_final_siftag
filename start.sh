@@ -1,22 +1,22 @@
 #!/bin/bash
 
 echo -e "endpoint="minio-server:9000" # servicio minio 
-correo_usuario="danielsalga50@hotmail.es"    
-password_usuario="aid573move841"    
+correo_usuario="XXXXX"    
+password_usuario=XXXXXXXX    
 server_host=http://10.1.5.145/golang_servicio/ #servicio golang ip  
-accessKeyID="admin" 
-secretAccessKey="password"  
+accessKeyID=XXXXXXXX
+secretAccessKey=XXXXXXXX  
 smtp_server=smtp-mail.outlook.com  
-POSTGRES_USER=tesis 
-POSTGRES_DB=diagrama  
-POSTGRES_PASSWORD=unillanos   
+POSTGRES_USER=XXXXXXx 
+POSTGRES_DB=XXXXXXXX  
+POSTGRES_PASSWORD=XXXXXX 
 server_java=http://pdf:8090/  
 POSTGRES_HOST_HOST=base_datos 
-REACT_APP_HOST_IP_SERVER=http://10.1.5.145/golang_servicio
-REACT_APP_HOST_IP_ADDRESS=http://10.1.5.145/react
+REACT_APP_HOST_IP_SERVER=http://XXXXXXXXX/golang_servicio
+REACT_APP_HOST_IP_ADDRESS=http://XXXXXXX/react
   " > .env  
 
-export Private_key=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
+export Private_key=XXXXXXXXXXXX
 export username=pruebasunillanosdaniel
 #echo -e "machine github.com login ${username} password ${Private_key}" >>  $HOME/.netrc 
 #export GOPRIVATE=github.com/pruebasunillanosdaniel/*
