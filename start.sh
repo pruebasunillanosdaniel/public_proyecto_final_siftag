@@ -14,7 +14,7 @@ server_java=http://pdf:8090/
 POSTGRES_HOST_HOST=base_datos 
 REACT_APP_HOST_IP_SERVER=http://XXXXXXXXX/golang_servicio
 REACT_APP_HOST_IP_ADDRESS=http://XXXXXXX/react
-  " > .env  
+  " >> .env  
 
 export Private_key=XXXXXXXXXXXX
 export username=pruebasunillanosdaniel
