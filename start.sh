@@ -1,25 +1,10 @@
 #!/bin/bash
+ 
 
-echo -e "endpoint="minio-server:9000" # servicio minio 
-correo_usuario="XXXXX"    
-password_usuario=XXXXXXXX    
-server_host=http://10.1.5.145/golang_servicio/ #servicio golang ip  
-accessKeyID=XXXXXXXX
-secretAccessKey=XXXXXXXX  
-smtp_server=smtp-mail.outlook.com  
-POSTGRES_USER=XXXXXXx 
-POSTGRES_DB=XXXXXXXX  
-POSTGRES_PASSWORD=XXXXXX 
-server_java=http://pdf:8090/  
-POSTGRES_HOST_HOST=base_datos 
-REACT_APP_HOST_IP_SERVER=http://XXXXXXXXX/golang_servicio
-REACT_APP_HOST_IP_ADDRESS=http://XXXXXXX/react
-  " >> .env  
-
-export Private_key=XXXXXXXXXXXX
+export Private_key=XXXXX
+echo $Private_key
 export username=pruebasunillanosdaniel
-#echo -e "machine github.com login ${username} password ${Private_key}" >>  $HOME/.netrc 
-#export GOPRIVATE=github.com/pruebasunillanosdaniel/*
+export c=$PWD
 mkdir -p bin/
 cd bin
 echo -e  "1 $PWD"
@@ -60,8 +45,9 @@ else
         git pull   https://${username}:${Private_key}@github.com/pruebasunillanosdaniel/pdf_server_spring main
         cd ..
 fi
-echo -e  "5 $PWD"
-if [ ! -d "certif" ] ;then
+echo -e  $c"/certif"
+if [ ! -d $c"/certif" ] ;then
+        cd $c
         echo  -e "creando certificado"
         mkdir -p certif
         cd certif/
@@ -69,10 +55,12 @@ if [ ! -d "certif" ] ;then
         cd ..
 fi
 
-cd ..
+cd $c
 
 pwd 
 sudo docker compose kill
 sudo docker compose down -v 
 #sudo docker volume rm -a
-sudo docker compose -f ./docker-compose.yml  up  --build  --force-recreate --remove-orphans
+export BUILDKIT_PROGRESS=plain
+ sudo docker compose build --build-arg Private_key=${Private_key}
+   sudo docker compose -f ./docker-compose.yml  up     --force-recreate --remove-orphans

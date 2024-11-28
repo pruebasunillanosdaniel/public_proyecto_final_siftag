@@ -1,14 +1,14 @@
 services:
-# sudo docker compose up -d --no-deps --build golang_servicios
   proxy_reverso:
     build:
       context: ./
       dockerfile: ./ngix_server.DOCKERFILE
+    env_file: "./enviroments/test/react.env"  
     hostname: proxy_reverso
     restart: always 
     ports:
-      - 8081:80
-      - 8443:443
+      - 8082:80
+      - 8449:443
     volumes:
       - ngix_servicio_volumns:/etc/nginx_config/
       - react_volumns:/usr/share/nginx/html
@@ -16,12 +16,12 @@ services:
       - dmz
     depends_on:
       golang_servicios:
-        condition: service_healthy
+       condition: service_healthy
   base_datos:
     build :
       context: ./
       dockerfile: ./postgres.DOCKERFILE  
-    env_file: ".env"
+    env_file: "./enviroments/test/postgres.env"  
     container_name: base_datos
     hostname: base_datos
     restart: always
@@ -31,8 +31,7 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s 
-#    ports:
-#      - 5432:5432
+
     volumes:
       - base_datos_volumns:/var/lib/postgresql/data
     networks:
@@ -41,19 +40,18 @@ services:
     build :
       context: ./
       dockerfile: ./minio.DOCKERFILE
-    env_file: ".env"     
-#    restart: always
+    env_file: "enviroments/test/minio.env"     
+    restart: always
     hostname: minio_server
-    healthcheck:
-      test: ["CMD-SHELL", "curl -I http://localhost:9000 "]
-      interval: 10s
-      retries: 5
-      start_period: 1s
-      timeout: 50s  
+    #healthcheck:
+    #  test: ["CMD-SHELL", "curl -I http://localhost:9000 "]
+    #  interval: 10s
+    #  retries: 5
+    #  start_period: 1s
+    #  timeout: 50s  
     volumes:
       - minio_volumns:/usr/bin/minio/data      
     ports:
-#      - 9000:9000
       - 9001:9001
     networks:
       - interna
@@ -63,10 +61,7 @@ services:
       context: ./
       dockerfile: ./Java_service.DOCKERFILE
     restart: always
-    env_file: ".env"      
     hostname: pdf_servicio     
-#    ports:
-#      - 8090:8090
     networks:
       - interna
     volumes:
@@ -75,11 +70,12 @@ services:
     build: 
       context: ./
       dockerfile: ./Golang_service.DOCKERFILE
+      args:
+        Private_key: ${Private_key}
     restart: always
     hostname: golang_servicios      
-#    ports:
-#      - 9091:9091
-    env_file: ".env"     
+
+    env_file: "enviroments/test/golang.env"  
     healthcheck:
       test: ["CMD-SHELL", "curl -I http://localhost:9091/ping "]
       interval: 10s

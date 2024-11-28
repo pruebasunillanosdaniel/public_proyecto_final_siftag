@@ -6,21 +6,22 @@ COPY bin/Proyecto_final_tesis /app/Proyecto_final_tesis
 WORKDIR /app/Proyecto_final_tesis
 
 
-ENV  Private_key=XXXXX
-ENV   username=pruebasunillanosdaniel
+
+ARG Private_key
+ENV  Private_key=${Private_key}
+ENV  username=pruebasunillanosdaniel
 ENV GOPRIVATE=github.com/pruebasunillanosdaniel/*
 ENV basededatos=base_datos
-
-RUN echo -e "machine github.com login ${username} password ${Private_key}" >>  $HOME/.netrc 
-RUN   set -eux;\
+#RUN echo -e "PRivate KEy ::::${Private_key}"
+RUN echo -e "machine github.com login ${username} password ${Private_key}" >  $HOME/.netrc 
+RUN   set -eux;\ 
          apk --no-cache  add git 
 #RUN  set -eux;\
 #        go mod tidy
 RUN echo -e "module Logica_negocio \n go 1.22 \n toolchain go1.22.1" > go.mod
 RUN   set -eux;\
           go mod tidy ;
-RUN go get -u github.com/pruebasunillanosdaniel/Golang_database  
-RUN go get -u github.com/pruebasunillanosdaniel/Resolucion2016  
+ 
  
 RUN mkdir /build
 RUN   go build -o /build/main .
@@ -32,6 +33,8 @@ FROM golang:alpine
 #FROM scratch
 RUN mkdir /app
 COPY --from=0 /build /app/Proyecto_final_tesis
+RUN mkdir /tmp/files
+COPY bin/formatos_proyecto_final/* /tmp/files
 
 WORKDIR /app/Proyecto_final_tesis
 RUN chmod +x main
