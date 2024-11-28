@@ -51,7 +51,7 @@ if [ ! -d $c"/certif" ] ;then
         echo  -e "creando certificado"
         mkdir -p certif
         cd certif/
-        sudo openssl req -newkey rsa:2048 -noenc -keyout key.key -out cert.csr
+        sudo openssl req -trustout -x509 -newkey rsa:2048 -sha256 -nodes -keyout key.key -out cert.crt -days 3650
         cd ..
 fi
 
