@@ -7,3 +7,5 @@ start2.sh
 f.tx
 r.txt
 enviroments/test
+start3.sh
+git-filter-repo
