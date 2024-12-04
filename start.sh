@@ -57,6 +57,12 @@ fi
 
 cd $c
 
+cat enviroments/golang.env | awk '{print $0"\n"}' | tee -a .env;
+cat enviroments/minio.env |awk '{print $1"\n"}' | tee -a .env;
+cat enviroments/postgres.env | awk '{print $1"\n"}' |tee -a .env;
+cat enviroments/react.env |awk '{print $1"\n"}' | tee -a .env;
+
+
 pwd 
 sudo docker compose kill
 sudo docker compose down -v 
