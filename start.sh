@@ -52,6 +52,7 @@ if [ ! -d $c"/certif" ] ;then
         mkdir -p certif
         cd certif/
         sudo openssl req -trustout -x509 -newkey rsa:2048 -sha256 -nodes -keyout key.key -out cert.crt -days 3650
+	sudo openssl dhparam -out dhparam.pem 4096
         cd ..
 fi
 
